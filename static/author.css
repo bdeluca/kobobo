@@ -1,0 +1,88 @@
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Author Banner */
+.author-banner {
+    background-color: #000; /* Black background for inverted style */
+    color: #fff; /* White text */
+    padding: 15px;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.author-banner h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Books Container */
+.books-container {
+    padding: 20px;
+    display: block; /* Ensure the container takes full width */
+}
+
+/* Individual Book */
+.book {
+    overflow: auto; /* Clear floated elements */
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Space between book cards */
+}
+
+/* Book Image */
+.book-image {
+    float: left; /* Float the image to the left */
+    margin-right: 20px; /* Space between the image and book details */
+}
+
+.book-image img {
+    width: 150px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Book Details */
+.book-details {
+    overflow: hidden; /* Ensure content stays next to the image */
+}
+
+.book-details h2 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+}
+
+.book-year {
+    font-size: 16px;
+    color: #888; /* Subtle gray for year */
+}
+
+.book-rating {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #ff9800; /* Orange for stars */
+}
+
+.book-description {
+    margin: 10px 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.book-tags, .book-series {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #888;
+}

@@ -2,17 +2,18 @@ import base64
 
 from flask import Flask, render_template, request,  render_template_string
 
+import calibre.opds as opds
+from config import Config
+
 app = Flask(__name__)
-
-
 
 @app.route('/')
 def index():  # put application's code here
     return render_template('index.html')
 
-@app.route('/aut')
+
+@app.route('/authors')
 def authors():
-    import calibre.opds as opds
     opds.gather_catalogs()
     authors_catalog = opds.GLOBAL_DATA["Authors"]
     authors_catalog.gather()
@@ -32,7 +33,16 @@ def author_page(encoded_id):
     # Decode the Base64-encoded ID
     decoded_id = base64.b64decode(encoded_id).decode('utf-8')
     # Proceed with using decoded_id to fetch author data
-    return render_template('author.html', author_id=decoded_id)
+
+    opds.gather_catalogs()
+    authors_catalog = opds.GLOBAL_DATA["Authors"]
+    authors_catalog.gather()
+    author_dict = authors_catalog.authors
+    author = author_dict.get(decoded_id)
+    author.gather()
+    c = Config()
+    calibre_root = c.opds_url_root
+    return render_template('author.html', author=author, calibre_root=calibre_root)
 
 
 @app.route('/binfo')

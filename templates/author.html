@@ -2,9 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ author.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='author.css') }}">
 </head>
 <body>
+    <!-- Author Banner -->
+    <div class="author-banner">
+        <h1>{{ author.name }}</h1>
+    </div>
 
+    <!-- Books Section -->
+    <div class="books-container">
+        {% for book in author.books %}
+        <div class="book">
+            <div class="book-image">
+                <img src="{{url_for('static',  filename=book.cover_image) }}" alt="Cover for {{ book.title }}">
+            </div>
+            <div class="book-details">
+                <h2>
+                    {{ book.title }}
+                    <span class="book-year">({{ book.published_date[:4] }})</span>
+                </h2>
+                <div class="book-rating">{{ book.rating }}</div>
+                <p class="book-description">
+                    {{ book.description[:300] }}{% if book.description|length > 300 %}...{% endif %}
+                </p>
+                <p class="book-tags">Tags: {{ book.tags }}</p>
+                {% if book.series %}
+                <p class="book-series">Series: {{ book.series }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

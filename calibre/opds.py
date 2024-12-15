@@ -1,9 +1,10 @@
 import base64
+import os.path
+from datetime import datetime, timezone
 
 import requests
 import xml.etree.ElementTree as ET
-
-
+from typing import List, Optional
 from collections import OrderedDict
 from config import Config
 from requests.auth import HTTPDigestAuth
@@ -76,7 +77,7 @@ class AuthorsCatalog(Catalog):
 class Author:
 
     def __str__(self):
-        return f"({self.name}, {self.items} books)"
+        return f"Author: {self.name}, {self.items} books"
 
     def __repr__(self):
         return self.__str__()
@@ -86,9 +87,114 @@ class Author:
         self.items = items
         self.url = url
         self.encoded_name = base64.urlsafe_b64encode(name.encode()).decode()
+        self.books = []
+
+    def gather(self):
+        page = fetch_opds_feed(self.url)
+
+        import xml.etree.ElementTree as ET
+        from collections import defaultdict
+        # Load and parse the XML file
+        ns = {
+            "atom": "http://www.w3.org/2005/Atom",
+            "dc": "http://purl.org/dc/terms/",
+            "opds": "http://opds-spec.org/2010/catalog",
+            "xhtml": "http://www.w3.org/1999/xhtml"
+        }
+
+        # Parse the XML data
+        root = ET.fromstring(page)
+        books = []
+
+        for entry in root.findall("atom:entry", ns):
+            title = entry.find("atom:title", ns).text
+            author = entry.find("atom:author/atom:name", ns).text
+            id_ = entry.find("atom:id", ns).text
+            published_date = entry.find("dc:date", ns).text if entry.find("dc:date", ns) is not None else datetime.today().isoformat()
+
+            # Extract content and parse for tags, series, and description
+            content = entry.find("atom:content", ns)
+            description = ""
+            tags = ""
+            series = None
+            rating = ""
+            if content is not None:
+                content_div = content.find("xhtml:div", ns)
+                if content_div is not None:
+                    # Extract all text from the content
+                    content_text = "".join(content_div.itertext())
+
+                    # Extract description from <p class="description">
+                    description_element = content_div.find(".//xhtml:p[@class='description']", ns)
+                    if description_element is not None:
+                        raw_description = "".join(description_element.itertext())
+                        description = "\n".join(line.strip() for line in raw_description.splitlines() if line.strip())
+
+                    # Extract tags
+                    tags_start = content_text.find("TAGS: ")
+                    if tags_start != -1:
+                        tags = content_text[tags_start + 6:].split("\n")[0].strip()
+
+                    # Extract series
+                    series_start = content_text.find("SERIES: ")
+                    if series_start != -1:
+                        series = content_text[series_start + 8:].split("\n")[0].strip()
+
+                    # Extract rating
+                    rating_start = content_text.find("RATING: ")
+                    if rating_start != -1:
+                        rating = content_text[rating_start + 8:].split("\n")[0].strip()
+
+                # Extract links
+            epub_link = None
+            cover_image = None
+            for link in entry.findall("atom:link", ns):
+                rel = link.get("rel")
+                if rel == "http://opds-spec.org/acquisition" and link.get("type") == "application/epub+zip":
+                    epub_link = link.get("href")
+                elif rel == "http://opds-spec.org/cover":
+                    cover_image = link.get("href")
+                    from os.path import dirname, join, exists  #what a mess, maybe I should just be serving the dynamically, but thats a pain, quick and dirty, really dirty
+                    cover_url =  join("covers", id_ + ".jpg")
+                    cover_url = cover_url.replace("urn:uuid:", "")
+                    local_cover = join(dirname(dirname(__file__)), join("static", cover_url))
+                    if not exists(local_cover):
+                        download_fom_opds_feed(cover_image, local_cover)
+                    cover_image = cover_url
+                    cover_image = cover_image.replace("\\", "/")
 
 
+            # Create a Book object and add it to the list
+            book = Book(
+                title=title,
+                author=author,
+                id=id_,
+                published_date=published_date,
+                description=description,
+                tags=tags,
+                series=series,
+                epub_link=epub_link,
+                cover_image=cover_image,
+                rating = rating
+            )
+            books.append(book)
+        self.books = sorted(books, key=lambda bk: bk.published_date, reverse=True)
 
+class Book:
+    def __init__(self, title: str, author: str, id: str, published_date: Optional[str], description: Optional[str], tags: Optional[str], series: Optional[str], epub_link: Optional[str], cover_image: Optional[str], rating: Optional[str]):
+        self.title = title
+        self.author = author
+        self.id = id
+        self.published_date = published_date
+        self.description = description
+        self.tags = tags
+        self.series = series
+        self.epub_link = epub_link
+        self.cover_image = cover_image
+        self.rating = rating
+
+    def __repr__(self):
+        return f"Book(title={self.title}, author={self.author}, id={self.id})"
 
 
 def fetch_opds_feed(url):
@@ -99,6 +205,19 @@ def fetch_opds_feed(url):
         return response.text
     else:
         raise Exception(f'Failed to retrieve OPDS feed: {response.status_code}')
+
+def download_fom_opds_feed(url, target):
+    c = Config()
+    try:
+        response = requests.get(f'{c.opds_url_root}/{url}', auth=HTTPDigestAuth(c.username, c.password), stream=True)
+        response.raise_for_status()
+        with open(target, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print("saved to", target)
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+
 
 def parse_opds_catalogs():
     catalog_feed = fetch_opds_feed("opds")
@@ -133,3 +252,18 @@ def gather_catalogs():
 
 if __name__ == '__main__':
     gather_catalogs()
+    aus = GLOBAL_DATA['Authors']
+    aus.gather()
+    a = list(aus.authors.values())[1]
+
+    a.gather()
+    # for b in a.books:
+    #     print(b.title)
+    #     print(b.cover_image)
+    #     #print(b.description)
+    #     #print(b.tags)
+    #     print(b.published_date)
+    #     #print(b.series)
+    #     #print(b.rating)
+
+
