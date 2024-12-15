@@ -11,19 +11,21 @@ body {
 .author-banner {
     background-color: #000; /* Black background for inverted style */
     color: #fff; /* White text */
-    padding: 15px;
+    padding: 15px; /* Padding around the banner */
     position: relative;
     top: 0;
     left: 0;
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    text-align: right; /* Right-align all content inside the banner */
 }
 
 .author-banner h1 {
-    margin: 0;
-    font-size: 24px;
+    margin: 0; /* Reset default margins */
+    margin-right: 40px; /* Add 15px margin on the right */
+    font-size: 35px;
 }
+
 
 /* Books Container */
 .books-container {
@@ -51,7 +53,8 @@ body {
 .book-image img {
     width: 150px;
     height: auto;
-    border-radius: 4px;
+    border-radius: 4px; /* Optional: keeps corners rounded */
+    border: 1px solid black; /* Adds a single black border */
 }
 
 /* Book Details */

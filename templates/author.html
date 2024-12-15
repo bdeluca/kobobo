@@ -26,9 +26,11 @@
                 </h2>
                 <div class="book-rating">{{ book.rating }}</div>
                 <p class="book-description">
-                    {{ book.description[:300] }}{% if book.description|length > 300 %}...{% endif %}
+                    {{(book.description or "No description provided")[:300] }}{% if book.description and book.description|length > 300 %}...{% endif %}
                 </p>
+                {% if book.tags %}
                 <p class="book-tags">Tags: {{ book.tags }}</p>
+                {% endif %}
                 {% if book.series %}
                 <p class="book-series">Series: {{ book.series }}</p>
                 {% endif %}

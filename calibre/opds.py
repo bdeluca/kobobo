@@ -104,6 +104,7 @@ class Author:
 
         # Parse the XML data
         root = ET.fromstring(page)
+
         books = []
 
         for entry in root.findall("atom:entry", ns):
@@ -114,38 +115,38 @@ class Author:
 
             # Extract content and parse for tags, series, and description
             content = entry.find("atom:content", ns)
-            description = ""
-            tags = ""
+            description = None
+            tags = None
             series = None
-            rating = ""
+            rating = None
             if content is not None:
                 content_div = content.find("xhtml:div", ns)
                 if content_div is not None:
-                    # Extract all text from the content
-                    content_text = "".join(content_div.itertext())
-
-                    # Extract description from <p class="description">
-                    description_element = content_div.find(".//xhtml:p[@class='description']", ns)
-                    if description_element is not None:
-                        raw_description = "".join(description_element.itertext())
-                        description = "\n".join(line.strip() for line in raw_description.splitlines() if line.strip())
+                    # Convert all text in the content to lines
+                    content_lines = "".join(content_div.itertext()).split("\n")
 
                     # Extract tags
-                    tags_start = content_text.find("TAGS: ")
-                    if tags_start != -1:
-                        tags = content_text[tags_start + 6:].split("\n")[0].strip()
+                    for line in content_lines:
+                        if line.startswith("TAGS:"):
+                            tags = line[len("TAGS:"):].strip()
+                        if line.startswith("SERIES:"):
+                            series = line[len("SERIES:"):].strip()
 
-                    # Extract series
-                    series_start = content_text.find("SERIES: ")
-                    if series_start != -1:
-                        series = content_text[series_start + 8:].split("\n")[0].strip()
+                    # Extract all <p> tags for the description
+                    paragraphs = content_div.findall("xhtml:p", ns)
+                    if paragraphs:
+                        raw_description = "\n\n".join("".join(p.itertext()).strip() for p in paragraphs)
+                        description = "\n".join(line.strip() for line in raw_description.splitlines() if line.strip())
 
                     # Extract rating
-                    rating_start = content_text.find("RATING: ")
+                    rating_start = "".join(content_div.itertext()).find("RATING: ")
                     if rating_start != -1:
-                        rating = content_text[rating_start + 8:].split("\n")[0].strip()
+                        rating = "".join(content_div.itertext())[rating_start + 8:].split("\n")[0].strip()
 
                 # Extract links
+            if rating is None:
+                rating = ""
+
             epub_link = None
             cover_image = None
             for link in entry.findall("atom:link", ns):
@@ -257,13 +258,13 @@ if __name__ == '__main__':
     a = list(aus.authors.values())[1]
 
     a.gather()
-    # for b in a.books:
-    #     print(b.title)
+    for b in a.books:
+         print(b.title)
     #     print(b.cover_image)
-    #     #print(b.description)
-    #     #print(b.tags)
+         print(b.description)
+         print("--------")
     #     print(b.published_date)
-    #     #print(b.series)
+    #      print(b.series)
     #     #print(b.rating)
 
 
