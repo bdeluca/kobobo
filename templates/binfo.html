@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browser Information</title>
+</head>
+<body>
+    <h1>Browser Information</h1>
+    <pre id="info">Collecting browser information...</pre>
+
+    <script>
+        // Function to send browser information to the server
+        function sendBrowserInfo() {
+            // Gather screen resolution
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+
+            // Gather user agent string
+            const userAgent = navigator.userAgent;
+
+            // Create a data object
+            const data = {
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                userAgent: userAgent
+            };
+
+            // Send data to the server using Fetch API
+            fetch('/browser-info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the received information
+                document.getElementById('info').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Execute the function when the page loads
+        window.onload = sendBrowserInfo;
+    </script>
+</body>
+</html>

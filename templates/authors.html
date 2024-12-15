@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='author.css') }}">
+
+</head>
+<div class="banner">
+    <h1>AUTHORS</h1>
+</div>
+<body>
+    <!-- Alphabet Navigation Table -->
+    <div class="alphabet-navigation">
+        <table>
+            <tr>
+            {% for char in letters %}
+                <td>
+                    <a href="#{{ char }}">{{ char }}</a>
+                </td>
+            {% endfor %}
+            </tr>
+        </table>
+    </div>
+
+    <!-- Author List -->
+    <div class="author-list">
+        {% for char, author_list in letter_dict.items() %}
+        <div id="{{ char }}" class="letter-group">  <!-- Unique div for each letter -->
+             {% if not loop.first %}  <!-- Skip the line for the first group -->
+                <hr>
+            {% endif %}
+            {% for author in author_list %}
+                <a href="{{ url_for('author_page', encoded_id=author.encoded_name) }}" class="author-button">
+                    <h4>
+        <span class="author-name">{{ author.name }}</span>
+        <span class="book-count">
+            {{ author.items }} {{ 'book' if author.items == 1 else 'books' }}
+            </span>
+             </h4>
+                </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+<div class="bottom-spacer"></div>
+</body>
+</html>
