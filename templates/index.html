@@ -2,12 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>Index Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to the home page.</p>
-    <p><a href="{{ url_for('binfo') }}">Go to Browser Info</a></p>
-    <p><a href="{{ url_for('authors') }}">authors</a></p>
+    <main>
+    <table class="navigation-table">
+    <tr>
+        <td><a href="/books" class="nav-button">BOOKS</a></td>
+        <td><a href="/authors" class="nav-button">AUTHORS</a></td>
+        <td><a href="/series" class="nav-button">SERIES</a></td>
+    </tr>
+    <tr>
+        <td><a href="/ratings" class="nav-button">RATINGS</a></td>
+        <td><a href="/language" class="nav-button">LANGUAGE</a></td>
+        <td><a href="/search" class="nav-button">SEARCH</a></td>
+    </tr>
+</table>
+        <section class="book-table">
+            <table>
+                {% for i in range(0, recent_books|length, 4) %}
+                <tr>
+                    {% for j in range(4) %}
+                    {% set index = i + j %}
+                    {% if index < recent_books|length %}
+                    <td class="book-item">
+                     <a href="{{ url_for('book_detail', book_id=recent_books[index].id) }}" class="book-link">
+                        <img src="{{ url_for('get_cover', cover_id=recent_books[index].cover_id) }}" alt="Cover for {{ recent_books[index].title }}" loading="lazy"/>
+                       <p class="book-title">{{ recent_books[index].title | truncate(40, True, '...') }}</p>
+                       <p class="book-author">{{ recent_books[index].author }} [{{ recent_books[index].published_date[:4] }}]</p>
+                    </a>
+                    </td>
+                    {% else %}
+                    <td class="book-item empty"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </main>
 </body>
 </html>

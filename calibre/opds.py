@@ -4,37 +4,11 @@ from urllib.parse import quote_plus, urlparse
 import requests
 import xml.etree.ElementTree as ET
 from typing import Optional
+
+from calibre.cache import GlobalCache
 from config import Config
 from requests.auth import HTTPDigestAuth
 
-
-class GlobalCache:
-    _instance = None  # Class variable to hold the single instance
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(GlobalCache, cls).__new__(cls)
-            cls._instance.catalogs = {}  # Initialize catalogs dictionary
-            cls._instance.books = {}     # Initialize books dictionary
-        return cls._instance
-
-    def get_catalog(self, key):
-        return self.catalogs.get(key)
-
-    def set_catalog(self, key, value):
-        self.catalogs[key] = value
-
-    def get_book(self, key):
-        return self.books.get(key)
-
-    def set_book(self, key, value):
-        self.books[key] = value
-
-    def clear_catalogs(self):
-        self.catalogs.clear()
-
-    def clear_books(self):
-        self.books.clear()
 
 def search_opds(search_terms, library_id='calibre'):
     """
@@ -57,6 +31,10 @@ class Catalog:
         if name == "Authors":
             from calibre.authors import AuthorsCatalog
             cat = AuthorsCatalog
+        elif name == "Title":
+            cat = TitleCatalog
+        elif name == "Newest":
+            cat = NewestCatalog
         return cat(name, url)
 
 
@@ -65,12 +43,25 @@ class Catalog:
         self.url = url
         self.letters = set()
 
+class TitleCatalog(Catalog):
+    def gather(self):
+        page = fetch_opds_feed(self.url)
+        return Book.retrieve_books(page)
+
+class NewestCatalog(Catalog):
+
+    def __init__(self, name, url):
+        super().__init__(name, url)
+        self.books = []
+
+    def gather(self):
+        page = fetch_opds_feed(self.url)
+        self.books =  Book.retrieve_books(page, onepage=True)
 
 class Book:
     @classmethod
-    def retrieve_books(cls, page):
+    def retrieve_books(cls, page, onepage=False):
         import xml.etree.ElementTree as ET
-        from collections import defaultdict
         # Load and parse the XML file
         ns = {
             "atom": "http://www.w3.org/2005/Atom",
@@ -83,9 +74,13 @@ class Book:
         root = ET.fromstring(page)
 
         books = []
-
+        next_url = None
         for entry in root.findall("atom:entry", ns):
-
+            namespaces = {'atom': 'http://www.w3.org/2005/Atom'}
+            for link in root.findall('atom:link', namespaces):
+                if link.get('rel') == 'next':
+                    next_url = link.get('href')
+                    break
             title = entry.find("atom:title", ns).text
             author = entry.find("atom:author/atom:name", ns).text
             id_ = entry.find("atom:id", ns).text
@@ -152,7 +147,12 @@ class Book:
                 cover_id=cover_id,
                 rating=rating
             )
+
+            GlobalCache().set_book(book.id, book)
             books.append(book)
+        if next_url is not None and not onepage:
+            page = fetch_opds_feed(next_url)
+            books += cls.retrieve_books(page)
 
         return books
 
@@ -226,28 +226,18 @@ def parse_opds_catalogs():
 
 def gather_catalogs():
     parse_opds_catalogs()
-    cat = GlobalCache().get_catalog('Authors')
-    cat.gather()
+    GlobalCache().get_catalog('Authors').gather()
+    GlobalCache().get_catalog('Title').gather()
+    print(GlobalCache().get_catalog('Newest').gather())
 
 
 
 if __name__ == '__main__':
     gather_catalogs()
-    aus = GlobalCache().get_catalog('Authors')
-    aus.gather()
-    a = list(aus.authors.values())[1]
-    a.gather()
-    for b in a.books:
-         print(b.title)
-    # #      print(b.cover_id)
-    # #      # print(b.description)
-    # #      print("--------")
-    # #     print(b.published_date)
-    # #      print(b.series)
-    # #     #print(b.rating)
+    # c = GlobalCache().get_catalog('Title')
+    # books = c.gather()
+    # for book in books:
+    #     print(book.title)
     #
-    #
-    # print(GLOBAL_DATA['search'])
-    # x = search_opds('brass man')
-    # for b in x:
-    #     print(b.title)
+
+

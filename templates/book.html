@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='book.css') }}">
+</head>
+<body>
+    <div class="book-container">
+        <h1 class="book-title">{{ book.title }}</h1>
+        <div class="book-cover">
+            <img src="{{ url_for('get_cover', cover_id=book.cover_id) }}" alt="Cover for {{ book.title }}" loading="lazy"/>
+            <a href="{{ url_for('download_book', book_id=book.id) }}" class="download-button">Download</a>
+        </div>
+        <div class="book-details">
+            <p class="book-author">{{ book.author }}</p>
+            {% if book.rating is not none %}
+            <p class="book-rating">{{ book.rating }}</p>
+            {% endif %}
+            <p class="book-publication-date">{{ book.published_date }}</p>
+            <div class="book-description">
+                <p>{{ book.description }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

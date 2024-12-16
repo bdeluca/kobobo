@@ -5,6 +5,8 @@ import requests
 from flask import Flask, render_template, request,  render_template_string, abort, send_file
 from requests.auth import HTTPDigestAuth
 
+import calibre.opds
+from  calibre.cache import GlobalCache
 import calibre.opds as opds
 from config import Config
 
@@ -12,13 +14,26 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():  # put application's code here
-    return render_template('index.html')
+    recent_books = GlobalCache().get_catalog("Newest")
+    recent_books = recent_books.books
+    return render_template('index.html', recent_books= recent_books[:8])
 
+@app.route('/book/<string:book_id>')
+def book_detail(book_id):
+    book = GlobalCache().get_book(book_id)
+    # For now, render an empty page or a placeholder template
+    return render_template('book.html', book= book)
+
+
+@app.route('/download/<string:book_id>')
+def download_book(book_id):
+    # Construct the file path based on the book_id
+    pass
 
 @app.route('/authors')
 def authors():
     opds.gather_catalogs()
-    authors_catalog = opds.GlobalCache().get_catalog("Authors")
+    authors_catalog = GlobalCache().get_catalog("Authors")
     authors_catalog.gather()
     author_dict  = authors_catalog.authors
     letter_dict = {}
@@ -64,7 +79,7 @@ def author_page(encoded_id):
     # Proceed with using decoded_id to fetch author data
 
     opds.gather_catalogs()
-    authors_catalog = opds.GlobalCache().get_catalog("Authors")
+    authors_catalog = GlobalCache().get_catalog("Authors")
     authors_catalog.gather()
     author_dict = authors_catalog.authors
     author = author_dict.get(decoded_id)
@@ -90,6 +105,12 @@ def binfo():
         </body>
         </html>
     ''', user_agent=user_agent)
+
+
+def init():
+    calibre.opds.gather_catalogs()
+
+init()
 
 
 if __name__ == '__main__':
