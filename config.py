@@ -48,3 +48,7 @@ class Config:
     @property
     def password(self):
         return self.get("OPDS", "PASSWORD")
+
+    @property
+    def kepubify(self):
+        return self.get("CONVERTER", "KEPUBIFY")
