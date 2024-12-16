@@ -163,5 +163,6 @@ cython_debug/
 
 # project required config
 config/settings.ini
+static/covers/*.jpg
 
 
