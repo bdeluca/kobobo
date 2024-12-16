@@ -15,9 +15,10 @@
     <!-- Books Section -->
     <div class="books-container">
         {% for book in author.books %}
+            <a href="/book/{{ book.id }}" class="book-link">
         <div class="book">
             <div class="book-image">
-                <img src="{{url_for('static',  filename=book.cover_image) }}" alt="Cover for {{ book.title }}">
+                <img src="{{ url_for('get_cover', cover_id=book.cover_id) }}" alt="Cover for {{ book.title }}" loading="lazy"/>
             </div>
             <div class="book-details">
                 <h2>
@@ -36,6 +37,7 @@
                 {% endif %}
             </div>
         </div>
+            </a>
         {% endfor %}
     </div>
 </body>

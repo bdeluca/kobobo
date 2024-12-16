@@ -1,6 +1,7 @@
 import base64
 import os.path
 from datetime import datetime, timezone
+from urllib.parse import urlparse
 
 import requests
 import xml.etree.ElementTree as ET
@@ -155,14 +156,9 @@ class Author:
                     epub_link = link.get("href")
                 elif rel == "http://opds-spec.org/cover":
                     cover_image = link.get("href")
-                    from os.path import dirname, join, exists  #what a mess, maybe I should just be serving the dynamically, but thats a pain, quick and dirty, really dirty
-                    cover_url =  join("covers", id_ + ".jpg")
-                    cover_url = cover_url.replace("urn:uuid:", "")
-                    local_cover = join(dirname(dirname(__file__)), join("static", cover_url))
-                    if not exists(local_cover):
-                        download_fom_opds_feed(cover_image, local_cover)
-                    cover_image = cover_url
-                    cover_image = cover_image.replace("\\", "/")
+                    parsed_url = urlparse(cover_image)
+                    path_segments = parsed_url.path.split('/')
+                    cover_id = path_segments[3] if len(path_segments) > 3 else None
 
 
             # Create a Book object and add it to the list
@@ -176,13 +172,14 @@ class Author:
                 series=series,
                 epub_link=epub_link,
                 cover_image=cover_image,
+                cover_id=cover_id,
                 rating = rating
             )
             books.append(book)
         self.books = sorted(books, key=lambda bk: bk.published_date, reverse=True)
 
 class Book:
-    def __init__(self, title: str, author: str, id: str, published_date: Optional[str], description: Optional[str], tags: Optional[str], series: Optional[str], epub_link: Optional[str], cover_image: Optional[str], rating: Optional[str]):
+    def __init__(self, title: str, author: str, id: str, published_date: Optional[str], description: Optional[str], tags: Optional[str], series: Optional[str], epub_link: Optional[str], cover_image: Optional[str], cover_id: Optional[str], rating: Optional[str]):
         self.title = title
         self.author = author
         self.id = id
@@ -193,6 +190,7 @@ class Book:
         self.epub_link = epub_link
         self.cover_image = cover_image
         self.rating = rating
+        self.cover_id = cover_id
 
     def __repr__(self):
         return f"Book(title={self.title}, author={self.author}, id={self.id})"
@@ -260,8 +258,8 @@ if __name__ == '__main__':
     a.gather()
     for b in a.books:
          print(b.title)
-    #     print(b.cover_image)
-         print(b.description)
+         print(b.cover_id)
+         # print(b.description)
          print("--------")
     #     print(b.published_date)
     #      print(b.series)

@@ -20,6 +20,11 @@ body {
     text-align: right; /* Right-align all content inside the banner */
 }
 
+a.book-link {
+  text-decoration: none;
+}
+
+
 .author-banner h1 {
     margin: 0; /* Reset default margins */
     margin-right: 40px; /* Add 15px margin on the right */
