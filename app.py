@@ -2,7 +2,7 @@ import base64
 from io import BytesIO
 
 import requests
-from flask import Flask, render_template, request,  render_template_string, abort, Response, send_file
+from flask import Flask, render_template, request,  render_template_string, abort, send_file
 from requests.auth import HTTPDigestAuth
 
 import calibre.opds as opds
@@ -18,7 +18,7 @@ def index():  # put application's code here
 @app.route('/authors')
 def authors():
     opds.gather_catalogs()
-    authors_catalog = opds.GLOBAL_DATA["Authors"]
+    authors_catalog = opds.GlobalCache().get_catalog("Authors")
     authors_catalog.gather()
     author_dict  = authors_catalog.authors
     letter_dict = {}
@@ -64,7 +64,7 @@ def author_page(encoded_id):
     # Proceed with using decoded_id to fetch author data
 
     opds.gather_catalogs()
-    authors_catalog = opds.GLOBAL_DATA["Authors"]
+    authors_catalog = opds.GlobalCache().get_catalog("Authors")
     authors_catalog.gather()
     author_dict = authors_catalog.authors
     author = author_dict.get(decoded_id)
