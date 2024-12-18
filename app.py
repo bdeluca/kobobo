@@ -41,16 +41,16 @@ def sanitize_string(input_str):
     sanitized_str = sanitized_str.strip('_')
     return sanitized_str
 
-def create_ebook_filename(author_name, book_title, year, extension='epub'):
+def create_ebook_filename(author_name, book_title, year):
     # Sanitize each component
     sanitized_author = sanitize_string(author_name)
     sanitized_title = sanitize_string(book_title)
     # Format the filename
-    filename = f"{sanitized_author}-{sanitized_title}-{year}.{extension}"
+    filename = f"{sanitized_author}-{sanitized_title}[{year}].kepub.epub"
     return filename
 
 
-@app.route('/download/<string:book_id>')
+@app.route('/download/<string:book_id>', methods=['GET'])
 def download_book(book_id):
     book = GlobalCache().get_book(book_id)
     c = Config()
@@ -69,13 +69,12 @@ def download_book(book_id):
     file_data = BytesIO()
     with tempfile.TemporaryDirectory() as temp_dir:
         epub_path = os.path.join(temp_dir, 'book.epub')
-        output_path = os.path.join(temp_dir, 'book_converted.kepub')
+        output_path = os.path.join(temp_dir, 'book_converted.kepub.epub')
 
         with open(epub_path, 'wb') as epub_file:
             epub_file.write(response.content)
         kpubbin = c.kepubify
-        cmd_list = [kpubbin,  "--calibre", "--smarten-punctuation", epub_path ]
-        print(" ".join(cmd_list))
+        cmd_list = [kpubbin,  "--smarten-punctuation", epub_path ]
         try:
             result = subprocess.run(cmd_list, cwd =temp_dir, check=True,capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
@@ -83,19 +82,32 @@ def download_book(book_id):
             print(e.stdout)
             print('Standard Error:', e.stderr)
             abort(500, description="Conversion failed")
+        x = os.listdir(temp_dir)
+        file_size = os.path.getsize(output_path)
 
+        print(file_size/8)
         if not os.path.exists(output_path):
-            abort(500, description="Converted file not found")
+            abort(500, description=f"Converted file not found {output_path}")
         with open(output_path, 'rb') as temp_file:
             file_data.write(temp_file.read())
+        file_size = os.path.getsize(output_path)
 
         # Move the pointer to the beginning of the BytesIO object
         file_data.seek(0)
+        download_name = create_ebook_filename(book.author, book.title, book.published_date[:4])
+        response =  send_file(file_data,
+                         as_attachment = True,
+                         mimetype='application/epub+zip',
+                         download_name  = download_name
+                         )
+        headers = response.headers
+        from urllib.parse import quote
+        encoded_filename = quote(download_name)
+        headers[
+            "Content-Disposition"] = f"attachment; filename=\"{download_name}\"; filename*=UTF-8''{encoded_filename}"
 
-        return send_file(file_data,
-                         as_attachment=True,
-                         mimetype='application/x-kepub+zip',
-                         download_name=create_ebook_filename(book.author, book.title, book.published_date[:4]))
+        print(headers)
+        return response
    
 @app.route('/authors')
 def authors():
