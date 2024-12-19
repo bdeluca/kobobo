@@ -1,0 +1,520 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+}
+
+
+
+.author-banner {
+    background-color: #000; /* Black background for inverted style */
+    color: #fff; /* White text */
+    padding: 15px; /* Padding around the banner */
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: right; /* Right-align all content inside the banner */
+}
+
+a.book-link {
+    text-decoration: none;
+}
+
+
+.author-banner h1 {
+    margin: 0; /* Reset default margins */
+    margin-right: 40px; /* Add 15px margin on the right */
+    font-size: 35px;
+}
+
+
+/* Books Container */
+.books-container {
+    padding: 20px;
+    display: block; /* Ensure the container takes full width */
+}
+
+/* Individual Book */
+.book {
+    overflow: auto; /* Clear floated elements */
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Space between book cards */
+}
+
+/* Book Image */
+.book-image {
+    float: left; /* Float the image to the left */
+    margin-right: 20px; /* Space between the image and book details */
+}
+
+.book-image img {
+    width: 150px;
+    height: auto;
+    border-radius: 4px; /* Optional: keeps corners rounded */
+    border: 1px solid black; /* Adds a single black border */
+}
+
+/* Book Details */
+.book-details {
+    overflow: hidden; /* Ensure content stays next to the image */
+}
+
+.book-details h2 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+}
+
+.book-year {
+    font-size: 16px;
+    color: #888; /* Subtle gray for year */
+}
+
+.book-rating {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #ff9800; /* Orange for stars */
+}
+
+.book-description {
+    margin: 10px 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.book-tags, .book-series {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #888;
+}
+
+.alphabet-navigation td {
+    background-color: #000; /* Black background for the boxes */
+    text-align: center;
+    padding: 10px; /* Adds some space inside the boxes */
+}
+
+.alphabet-navigation a {
+    display: block; /* Makes the entire cell clickable */
+    width: 100%; /* Ensures the link fills the box */
+    height: 100%; /* Ensures consistent clickable area */
+    color: #fff; /* White text for contrast */
+    font-family: "Courier New", Courier, monospace; /* Fixed-width font */
+    font-weight: bold; /* Bold text */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px; /* Adjust font size as needed */
+}
+
+
+.author-button {
+    display: inline-block; /* Makes it behave like a button */
+    padding: 10px 15px; /* Comfortable padding for touch interactions */
+    margin: 8px 0; /* Adds space between buttons */
+    text-decoration: none; /* Removes underline */
+    color: #333; /* Default text color */
+    font-size: 16px; /* Adjust font size for readability */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 8px; /* Rounded corners for a button look */
+    background-color: #f9f9f9; /* Default light background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle depth */
+    transition: all 0.2s ease; /* Smooth transitions for visual feedback */
+}
+
+.author-button:active {
+    background-color: #eef7ff; /* Light blue to show it's being pressed */
+    border-color: #007BFF; /* Highlight border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle "pressed" look */
+    transform: scale(0.98); /* Slight "shrink" effect on touch */
+}
+
+.alphabet-navigation table {
+    width: 100%; /* Make the table span the full width of its container */
+    table-layout: fixed; /* Ensure equal column widths */
+}
+
+.alphabet-navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Make it span the full width of the viewport */
+    z-index: 1000;
+    background-color: #fff; /* Prevent content from showing through */
+    border-bottom: 1px solid #ccc; /* Optional border for separation */
+}
+
+.letter-group hr {
+    border: none;
+    height: 2px;
+    background-image: linear-gradient(to right, #007BFF, #ccc);
+    margin: 20px 0;
+}
+
+.author-button h4 {
+    font-family: Arial, sans-serif; /* Clean, modern font */
+    margin: 0; /* Remove default margin */
+    font-size: 20px; /* Larger font for the author's name */
+    color: #333; /* Default dark color for the text */
+}
+
+.author-button .book-count {
+    font-size: 14px; /* Smaller font for the book count */
+    color: #999; /* Lighter gray for less emphasis */
+    margin-left: 8px; /* Add some spacing between the name and count */
+}
+
+.bottom-spacer {
+    height: 100vh; /* Full viewport height to ensure proper scrolling */
+}
+
+.banner {
+    background-color: #001f3f; /* Really dark blue background */
+    color: #ffffff; /* White text for contrast */
+    text-align: center; /* Center the text */
+    padding: 2px 0; /* Minimal vertical padding for a compact look */
+    font-family: Arial, sans-serif; /* Clean, modern font */
+    font-size: 20px; /* Slightly smaller font size */
+    font-weight: bold; /* Bold text for emphasis */
+    line-height: 1.2; /* Tighter line spacing */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+}
+
+
+.book-container {
+    width: 100%;
+}
+
+.book-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.book-cover {
+    float: right;
+    width: 200px;
+    margin: 0 0 20px 20px;
+    text-align: center;
+}
+
+.book-cover img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+.book-details {
+    overflow: hidden;
+}
+
+.book-author,
+.book-rating,
+.book-publication-date {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.book-description {
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+
+
+.navigation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.navigation-table td {
+    width: 33.33%;
+    padding: 0;
+}
+
+.nav-button {
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid #fff;
+}
+
+.book-link {
+    text-decoration: none;
+
+}
+
+.nav-button:hover {
+    background-color: #333;
+}
+
+
+.book-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.book-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: top; /* Aligns content to the top of the cell */
+}
+
+.book-item img {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.book-author {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.book-item p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.book-item.empty {
+    border: none;
+}
+
+.alphabet-navigation td {
+    background-color: #000; /* Black background for the boxes */
+    text-align: center;
+    padding: 10px; /* Adds some space inside the boxes */
+}
+
+.alphabet-navigation a {
+    display: block; /* Makes the entire cell clickable */
+    width: 100%; /* Ensures the link fills the box */
+    height: 100%; /* Ensures consistent clickable area */
+    color: #fff; /* White text for contrast */
+    font-family: "Courier New", Courier, monospace; /* Fixed-width font */
+    font-weight: bold; /* Bold text */
+    text-decoration: none; /* Remove underline */
+    font-size: 18px; /* Adjust font size as needed */
+}
+
+
+.author-button {
+    display: inline-block; /* Makes it behave like a button */
+    padding: 10px 15px; /* Comfortable padding for touch interactions */
+    margin: 8px 0; /* Adds space between buttons */
+    text-decoration: none; /* Removes underline */
+    color: #333; /* Default text color */
+    font-size: 16px; /* Adjust font size for readability */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 8px; /* Rounded corners for a button look */
+    background-color: #f9f9f9; /* Default light background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle depth */
+    transition: all 0.2s ease; /* Smooth transitions for visual feedback */
+}
+
+.author-button:active {
+    background-color: #eef7ff; /* Light blue to show it's being pressed */
+    border-color: #007BFF; /* Highlight border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle "pressed" look */
+    transform: scale(0.98); /* Slight "shrink" effect on touch */
+}
+
+.alphabet-navigation table {
+    width: 100%; /* Make the table span the full width of its container */
+    table-layout: fixed; /* Ensure equal column widths */
+}
+
+.alphabet-navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Make it span the full width of the viewport */
+    z-index: 1000;
+    background-color: #fff; /* Prevent content from showing through */
+    border-bottom: 1px solid #ccc; /* Optional border for separation */
+}
+
+.letter-group hr {
+    border: none;
+    height: 2px;
+    background-image: linear-gradient(to right, #007BFF, #ccc);
+    margin: 20px 0;
+}
+
+.author-button h4 {
+    font-family: Arial, sans-serif; /* Clean, modern font */
+    margin: 0; /* Remove default margin */
+    font-size: 20px; /* Larger font for the author's name */
+    color: #333; /* Default dark color for the text */
+}
+
+.author-button .book-count {
+    font-size: 14px; /* Smaller font for the book count */
+    color: #999; /* Lighter gray for less emphasis */
+    margin-left: 8px; /* Add some spacing between the name and count */
+}
+
+.bottom-spacer {
+    height: 100vh; /* Full viewport height to ensure proper scrolling */
+}
+
+
+
+.book-container {
+    width: 100%;
+}
+
+.book-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.book-cover {
+    float: right;
+    width: 200px;
+    margin: 0 0 20px 20px;
+    text-align: center;
+}
+
+.book-cover img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.download-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+.book-details {
+    overflow: hidden;
+}
+
+
+.book-rating,
+.book-publication-date {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.book-description {
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+
+.navigation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.navigation-table td {
+    width: 33.33%;
+    padding: 0;
+}
+
+.nav-button {
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid #fff;
+}
+
+.book-link {
+    text-decoration: none;
+
+}
+
+.nav-button:hover {
+    background-color: #333;
+}
+
+
+.book-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.book-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: top; /* Aligns content to the top of the cell */
+}
+
+.book-item img {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.book-author {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.book-item p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.book-item.empty {
+    border: none;
+}
+
