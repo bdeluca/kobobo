@@ -1,3 +1,5 @@
+import re
+from collections import OrderedDict
 from datetime import datetime
 from urllib.parse import quote_plus, urlparse
 
@@ -26,7 +28,6 @@ def search_opds(search_terms, library_id='calibre'):
 class Catalog:
     @classmethod
     def create_catalog(cls, name, url):
-        print(name)
         cat = Catalog
         if name == "Authors":
             from calibre.authors import AuthorsCatalog
@@ -35,6 +36,7 @@ class Catalog:
             cat = TitleCatalog
         elif name == "Newest":
             cat = NewestCatalog
+
         return cat(name, url)
 
 
@@ -46,7 +48,9 @@ class Catalog:
 class TitleCatalog(Catalog):
     def gather(self):
         page = fetch_opds_feed(self.url)
-        return Book.retrieve_books(page)
+        books = Book.retrieve_books(page)
+        GlobalCache().series = OrderedDict(sorted(GlobalCache().series.items()))
+        return books
 
 class NewestCatalog(Catalog):
 
@@ -59,6 +63,10 @@ class NewestCatalog(Catalog):
         self.books =  Book.retrieve_books(page, onepage=True)
 
 class Book:
+    series_re = re.compile(
+    r'^(?P<series_name>.*?)\s*\[(?P<series_position>\d+)\]$'
+)
+
     @classmethod
     def retrieve_books(cls, page, onepage=False):
         import xml.etree.ElementTree as ET
@@ -123,6 +131,7 @@ class Book:
 
             epub_link = None
             cover_image = None
+            cover_id = None
             for link in entry.findall("atom:link", ns):
                 rel = link.get("rel")
                 if rel == "http://opds-spec.org/acquisition" and link.get("type") == "application/epub+zip":
@@ -153,7 +162,6 @@ class Book:
         if next_url is not None and not onepage:
             page = fetch_opds_feed(next_url)
             books += cls.retrieve_books(page)
-
         return books
 
 
@@ -162,7 +170,9 @@ class Book:
         self.title = title
         self.author = author
         self.id = id
-        self.published_date = published_date
+        self.published_date = datetime.fromisoformat(published_date)
+        self.year = self.published_date.year
+        self.pretty_date = self.published_date.strftime("%x")
         self.description = description
         self.tags = tags
         self.series = series
@@ -170,6 +180,13 @@ class Book:
         self.cover_image = cover_image
         self.rating = rating
         self.cover_id = cover_id
+        if self.series:
+            match = self.series_re.search(self.series)
+            if match:
+                series_name = match.group('series_name').strip()
+                series_position = int(match.group('series_position'))
+                GlobalCache().set_series(series_name, series_position, self)
+
 
     def __repr__(self):
         return f"Book(title={self.title}, author={self.author}, id={self.id})"
@@ -179,18 +196,6 @@ def fetch_opds_feed(url):
     c = Config()
     response = requests.get(f'{c.opds_url_root}/{url}', auth=HTTPDigestAuth(c.username, c.password))
     return response.text
-
-# def download_fom_opds_feed(url, target):
-#     c = Config()
-#     try:
-#         response = requests.get(f'{c.opds_url_root}/{url}', auth=HTTPDigestAuth(c.username, c.password), stream=True)
-#         response.raise_for_status()
-#         with open(target, 'wb') as f:
-#             for chunk in response.iter_content(chunk_size=8192):
-#                 f.write(chunk)
-#         print("saved to", target)
-#     except requests.exceptions.RequestException as e:
-#         print(f"An error occurred: {e}")
 
 
 def parse_opds_catalogs():
@@ -220,7 +225,7 @@ def parse_opds_catalogs():
         # Append the extracted data as a dictionary to the entries list
         entries.append({'title': title, 'href': href})
         c = Catalog.create_catalog(title, href)
-        if title not in ["Library", "Publisher"]:
+        if title not in ["Library", "Publisher", "Series"]:
             GlobalCache().set_catalog(title, c)
 
 
@@ -228,13 +233,24 @@ def gather_catalogs():
     parse_opds_catalogs()
     GlobalCache().get_catalog('Authors').gather()
     GlobalCache().get_catalog('Title').gather()
-    print(GlobalCache().get_catalog('Newest').gather())
+    GlobalCache().get_catalog('Newest').gather()
+
+
+def test():
+    gather_catalogs()
+    print(type(GlobalCache().series))
+    for series in GlobalCache().series:
+        sd = GlobalCache().get_series(series)
+        print(f"{series} - {next(iter(sd.values())).author}")
+        for position, book in sorted(sd.items()):
+            print(f"    {position}: {sd[position].title}")
 
 
 
 if __name__ == '__main__':
-    gather_catalogs()
-    # c = GlobalCache().get_catalog('Title')
+    test()
+
+    #c = GlobalCache().get_catalog('Title')
     # books = c.gather()
     # for book in books:
     #     print(book.title)

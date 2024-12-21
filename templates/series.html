@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='series.css') }}">
+
+</head>
+<div class="banner">
+    <h1>SERIES</h1>
+</div>
+<body>
+    <!-- Alphabet Navigation Table -->
+    <div class="alphabet-navigation">
+        <table>
+            <tr>
+            {% for char in letters %}
+                <td>
+                    <a href="#{{ char }}">{{ char }}</a>
+                </td>
+            {% endfor %}
+            </tr>
+        </table>
+    </div>
+    <div class="series-list">
+        {% for char, series_list in letter_dict.items() %}
+        <div id="{{ char }}" class="letter-group">  <!-- Unique div for each letter -->
+             {% if not loop.first %}  <!-- Skip the line for the first group -->
+                <hr>
+            {% endif %}
+            {% for series_title in series_list %}
+               <p>
+                <h1><span class="series-title">{{ series_title }}</span></h1>
+                <table>
+                <tr>
+                {% for position, book in series[series_title] | dictsort %}
+
+                    <td class="book-item">
+                     <a href="{{ url_for('book_detail', book_id=book.id) }}" class="book-link">
+                        <img src="{{ url_for('get_cover', cover_id=book.cover_id) }}" alt="Cover for {{ book.title }}" loading="lazy"/>
+                        <p class="book-title">{{ book.title | truncate(40, True, '...') }}</p>
+                    </a>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </table>
+
+            </p>
+        {% endfor %}
+    </div>
+<div class="bottom-spacer"></div>
+</body>
+</html>

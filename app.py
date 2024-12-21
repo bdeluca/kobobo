@@ -94,7 +94,7 @@ def download_book(book_id):
 
         # Move the pointer to the beginning of the BytesIO object
         file_data.seek(0)
-        download_name = create_ebook_filename(book.author, book.title, book.published_date[:4])
+        download_name = create_ebook_filename(book.author, book.title, book.year)
         response =  send_file(file_data,
                          as_attachment = True,
                          mimetype='application/epub+zip',
@@ -111,9 +111,7 @@ def download_book(book_id):
    
 @app.route('/authors')
 def authors():
-    opds.gather_catalogs()
     authors_catalog = GlobalCache().get_catalog("Authors")
-    authors_catalog.gather()
     author_dict  = authors_catalog.authors
     letter_dict = {}
     for author in author_dict.values():
@@ -124,6 +122,20 @@ def authors():
     letters = sorted(letter_dict.keys())
 
     return render_template('authors.html',  letter_dict=letter_dict, letters=letters)
+
+
+@app.route('/series')
+def series():
+    series_dict = GlobalCache().series
+    letter_dict = {}
+    for series_title in series_dict.keys():
+        initial = series_title[0].upper()  # Get the first letter of each name
+        if initial not in letter_dict:
+            letter_dict[initial] = []
+        letter_dict[initial].append(series_title)
+    letters = sorted(letter_dict.keys())
+    print(letters)
+    return render_template('series.html',  letter_dict=letter_dict, letters=letters, series=series_dict)
 
 
 @app.route('/cover/<int:cover_id>')
