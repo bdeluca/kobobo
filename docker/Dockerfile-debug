@@ -1,0 +1,21 @@
+# Use a lightweight Python base image
+FROM kobobo:latest
+
+
+
+
+
+
+# Expose the port (Flask typically uses 5000 by default)
+EXPOSE 5000
+
+RUN apt-get update
+RUN apt-get install -y lsof
+
+
+# Set the entry point or default command to run your Flask app
+# The command below assumes your Flask app’s entry point is in app.py
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["python", "app.py"]
+
+

@@ -200,10 +200,11 @@ def download_kepublify():
     import os
     import requests
     import shutil
+    import stat
 
     # Define the URL and the destination file path
     url = 'https://github.com/pgaskin/kepubify/releases/latest/download/kepubify-linux-64bit'
-    destination_path = '/app/bin/pubify'
+    destination_path = '/app/bin/kepubify'
 
     # Check if the file already exists
     if not os.path.exists(destination_path):
@@ -223,6 +224,8 @@ def download_kepublify():
             print(f'An error occurred: {err}')
     else:
         print(f'File already exists at {destination_path}')
+    st = os.stat(destination_path)
+    os.chmod(destination_path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 
 def is_docker():
@@ -231,7 +234,10 @@ def is_docker():
 def init():
     if is_docker():
         download_kepublify()
+        print("Docker server is probably available at http://127.0.0.1:5055")
     calibre.opds.gather_catalogs()
+
+
 init()
 
 if __name__ == '__main__':
@@ -239,7 +245,7 @@ if __name__ == '__main__':
     # Configure the Waitress logger
     logger = logging.getLogger('waitress')
     logger.setLevel(logging.DEBUG)  # Set to DEBUG for detailed output
-    port = 5000
+    port = 5055
     # app.run(host='0.0.0.0', port=5000, debug=True)
-    serve(app, listen=[f"127.0.0.1:{port}"])
+    serve(app, listen=[f"0.0.0.0:{port}"])
     print('Done')

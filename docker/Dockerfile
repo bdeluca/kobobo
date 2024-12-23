@@ -19,8 +19,7 @@ ENV KOBOBO_PASSWORD=password
 
 
 
-# Expose the port (Flask typically uses 5000 by default)
-EXPOSE 5000
+EXPOSE 5003
 
 # Set the entry point or default command to run your Flask app
 # The command below assumes your Flask app’s entry point is in app.py

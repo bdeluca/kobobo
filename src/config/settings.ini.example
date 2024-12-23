@@ -1,6 +1,6 @@
 [OPDS]
 URL_ROOT = <http://calibre>
-USERNAME = <calbire username>
+USERNAME = <calibre username>
 PASSWORD = <calibre password>
 
 [CONVERTER]
