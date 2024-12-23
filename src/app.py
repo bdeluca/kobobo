@@ -1,4 +1,5 @@
 import base64
+import logging
 import os
 import subprocess
 import tempfile
@@ -6,12 +7,13 @@ from io import BytesIO
 
 import requests
 from flask import Flask, render_template, request,  render_template_string, abort, send_file
+from waitress import serve
 from requests.auth import HTTPDigestAuth
 
-import calibre.opds
 from  calibre.cache import GlobalCache
 import calibre.opds as opds
 from config import Config
+import calibre
 
 app = Flask(__name__)
 
@@ -76,21 +78,17 @@ def download_book(book_id):
         kpubbin = c.kepubify
         cmd_list = [kpubbin,  "--smarten-punctuation", epub_path ]
         try:
-            result = subprocess.run(cmd_list, cwd =temp_dir, check=True,capture_output=True, text=True)
+            subprocess.run(cmd_list, cwd =temp_dir, check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
             print(f'Error during conversion: {e}')
             print(e.stdout)
             print('Standard Error:', e.stderr)
             abort(500, description="Conversion failed")
-        x = os.listdir(temp_dir)
-        file_size = os.path.getsize(output_path)
 
-        print(file_size/8)
         if not os.path.exists(output_path):
             abort(500, description=f"Converted file not found {output_path}")
         with open(output_path, 'rb') as temp_file:
             file_data.write(temp_file.read())
-        file_size = os.path.getsize(output_path)
 
         # Move the pointer to the beginning of the BytesIO object
         file_data.seek(0)
@@ -134,7 +132,7 @@ def series():
             letter_dict[initial] = []
         letter_dict[initial].append(series_title)
     letters = sorted(letter_dict.keys())
-    print(letters)
+
     return render_template('series.html',  letter_dict=letter_dict, letters=letters, series=series_dict)
 
 
@@ -198,11 +196,50 @@ def binfo():
     ''', user_agent=user_agent)
 
 
+def download_kepublify():
+    import os
+    import requests
+    import shutil
+
+    # Define the URL and the destination file path
+    url = 'https://github.com/pgaskin/kepubify/releases/latest/download/kepubify-linux-64bit'
+    destination_path = '/app/bin/pubify'
+
+    # Check if the file already exists
+    if not os.path.exists(destination_path):
+        try:
+            # Send a GET request to the URL
+            with requests.get(url, stream=True) as response:
+                response.raise_for_status()  # Check for HTTP errors
+                # Ensure the destination directory exists
+                os.makedirs(os.path.dirname(destination_path), exist_ok=True)
+                # Open the destination file in write-binary mode and save the content
+                with open(destination_path, 'wb') as out_file:
+                    shutil.copyfileobj(response.raw, out_file)
+            print(f'File downloaded and saved to {destination_path}')
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'An error occurred: {err}')
+    else:
+        print(f'File already exists at {destination_path}')
+
+
+def is_docker():
+    return os.path.exists('/.dockerenv')
+
 def init():
+    if is_docker():
+        download_kepublify()
     calibre.opds.gather_catalogs()
 
-init()
-
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    init()
+    print('Starting server...')
+    # Configure the Waitress logger
+    logger = logging.getLogger('waitress')
+    logger.setLevel(logging.DEBUG)  # Set to DEBUG for detailed output
+    port = 5000
+    # app.run(host='0.0.0.0', port=5000, debug=True)
+    serve(app, listen=[f"127.0.0.1:{port}", f"0.0.0.0:{port+1}" ])
+    print('Done')

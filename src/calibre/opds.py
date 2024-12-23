@@ -230,10 +230,13 @@ def parse_opds_catalogs():
 
 
 def gather_catalogs():
+    c = Config()
+    print(f"Connecting to {c.opds_url_root}")
     parse_opds_catalogs()
     GlobalCache().get_catalog('Authors').gather()
     GlobalCache().get_catalog('Title').gather()
     GlobalCache().get_catalog('Newest').gather()
+    print("Done gathering catalogs")
 
 
 def test():
