@@ -232,14 +232,14 @@ def init():
     if is_docker():
         download_kepublify()
     calibre.opds.gather_catalogs()
+init()
 
 if __name__ == '__main__':
-    init()
     print('Starting server...')
     # Configure the Waitress logger
     logger = logging.getLogger('waitress')
     logger.setLevel(logging.DEBUG)  # Set to DEBUG for detailed output
     port = 5000
     # app.run(host='0.0.0.0', port=5000, debug=True)
-    serve(app, listen=[f"127.0.0.1:{port}", f"0.0.0.0:{port+1}" ])
+    serve(app, listen=[f"127.0.0.1:{port}"])
     print('Done')
