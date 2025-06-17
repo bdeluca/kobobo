@@ -14,7 +14,7 @@
     <main>
         <!-- Navigation back to home -->
         <div class="nav-back">
-            <a href="{{ url_for('index') }}" class="nav-button">← BACK TO HOME</a>
+            <a href="{{ url_for('main.index') }}" class="nav-button">← BACK TO HOME</a>
         </div>
         
         <div class="message-container">
@@ -24,10 +24,10 @@
             
             <div class="suggested-alternatives">
                 <h3>Alternative Browsing Options:</h3>
-                <a href="{{ url_for('books') }}" class="nav-button">Browse All Books</a>
-                <a href="{{ url_for('authors') }}" class="nav-button">Browse by Author</a>
-                <a href="{{ url_for('series') }}" class="nav-button">Browse by Series</a>
-                <a href="{{ url_for('search') }}" class="nav-button">Search Books</a>
+                <a href="{{ url_for('books.books') }}" class="nav-button">Browse All Books</a>
+                <a href="{{ url_for('library.authors') }}" class="nav-button">Browse by Author</a>
+                <a href="{{ url_for('library.series') }}" class="nav-button">Browse by Series</a>
+                <a href="{{ url_for('books.search') }}" class="nav-button">Search Books</a>
             </div>
         </div>
     </main>

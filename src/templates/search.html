@@ -15,12 +15,12 @@
     <main>
         <!-- Navigation back to home -->
         <div class="nav-back">
-            <a href="{{ url_for('index') }}" class="nav-button">← BACK TO HOME</a>
+            <a href="{{ url_for('main.index') }}" class="nav-button">← BACK TO HOME</a>
         </div>
         
         <!-- Search form -->
         <div class="search-container">
-            <form method="GET" action="{{ url_for('search') }}" class="search-form">
+            <form method="GET" action="{{ url_for('books.search') }}" class="search-form">
                 <table class="search-table">
                     <tr>
                         <td class="search-input-cell">
@@ -55,8 +55,8 @@
                         {% set index = i + j %}
                         {% if index < results|length %}
                         <td class="book-item">
-                            <a href="{{ url_for('book_detail', book_id=results[index].id) }}" class="book-link">
-                                <img src="{{ url_for('get_cover', cover_id=results[index].cover_id) }}" alt="Cover for {{ results[index].title }}" loading="lazy"/>
+                            <a href="{{ url_for('main.book_detail', book_id=results[index].id) }}" class="book-link">
+                                <img src="{{ url_for('downloads.get_cover', cover_id=results[index].cover_id) }}" alt="Cover for {{ results[index].title }}" loading="lazy"/>
                                 <p class="book-title">{{ results[index].title | truncate(35, True, '...') }}</p>
                                 <p class="book-author">{{ results[index].author }}</p>
                                 <p class="book-year">[{{ results[index].year }}]</p>
@@ -74,9 +74,9 @@
             <div class="no-results">
                 <p>No books found matching "{{ query }}"</p>
                 <p>Try different keywords or browse by:</p>
-                <a href="{{ url_for('authors') }}" class="nav-button">Authors</a>
-                <a href="{{ url_for('series') }}" class="nav-button">Series</a>
-                <a href="{{ url_for('books') }}" class="nav-button">All Books</a>
+                <a href="{{ url_for('library.authors') }}" class="nav-button">Authors</a>
+                <a href="{{ url_for('library.series') }}" class="nav-button">Series</a>
+                <a href="{{ url_for('books.books') }}" class="nav-button">All Books</a>
             </div>
             {% endif %}
         </div>

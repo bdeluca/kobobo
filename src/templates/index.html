@@ -28,8 +28,8 @@
                     {% set index = i + j %}
                     {% if index < recent_books|length %}
                     <td class="book-item">
-                     <a href="{{ url_for('book_detail', book_id=recent_books[index].id) }}" class="book-link">
-                        <img src="{{ url_for('get_cover', cover_id=recent_books[index].cover_id) }}" alt="Cover for {{ recent_books[index].title }}" loading="lazy"/>
+                     <a href="{{ url_for('main.book_detail', book_id=recent_books[index].id) }}" class="book-link">
+                        <img src="{{ url_for('downloads.get_cover', cover_id=recent_books[index].cover_id) }}" alt="Cover for {{ recent_books[index].title }}" loading="lazy"/>
                        <p class="book-title">{{ recent_books[index].title | truncate(40, True, '...') }}</p>
                        <p class="book-author">{{ recent_books[index].author }} [{{ recent_books[index].year }}]</p>
                     </a>

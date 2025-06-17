@@ -33,7 +33,7 @@
                 <hr>
             {% endif %}
             {% for author in author_list %}
-                <a href="{{ url_for('author_page', encoded_id=author.encoded_name) }}" class="author-button">
+                <a href="{{ url_for('library.author_page', encoded_id=author.encoded_name) }}" class="author-button">
                     <h4>
         <span class="author-name">{{ author.name }}</span>
         <span class="book-count">
