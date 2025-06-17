@@ -164,5 +164,6 @@ cython_debug/
 # project required config
 src/config/settings.ini
 src/bin/*.exe
+kobobo.yml
 
 
