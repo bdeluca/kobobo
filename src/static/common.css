@@ -1,10 +1,11 @@
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', 'Roboto', 'Arial Black', Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #fff;
     color: #333;
+    font-weight: 500;
 }
 
 
@@ -298,9 +299,18 @@ a.book-link {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.book-title {
-    font-size: 1em;
-    font-weight: bold;
+.book-item .book-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    margin: 8px 0 4px 0;
+    line-height: 1.2;
+    height: 36px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: #333;
 }
 
 .book-author {
@@ -484,9 +494,18 @@ a.book-link {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.book-title {
-    font-size: 1em;
-    font-weight: bold;
+.book-item .book-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    margin: 8px 0 4px 0;
+    line-height: 1.2;
+    height: 36px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: #333;
 }
 
 .book-author {
