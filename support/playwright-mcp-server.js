@@ -20,6 +20,16 @@ const server = new Server(
 let browser = null;
 let page = null;
 
+// E-reader viewport presets for testing
+const E_READER_VIEWPORTS = {
+  'kobo-glo': { width: 758, height: 1024 },
+  'kobo-clara-hd': { width: 1264, height: 1680 },
+  'kindle-paperwhite': { width: 758, height: 1024 },
+  'kobo-aura': { width: 758, height: 1024 },
+  'kobo-sage': { width: 1440, height: 1920 },
+  'kobo-elipsa': { width: 1404, height: 1872 }
+};
+
 // Tool to take a screenshot of the Kobobo interface
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
@@ -37,13 +47,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             width: {
               type: 'number',
-              description: 'Viewport width',
-              default: 1280
+              description: 'Viewport width (defaults to Kobo Glo: 758)',
+              default: 758
             },
             height: {
               type: 'number', 
-              description: 'Viewport height',
-              default: 720
+              description: 'Viewport height (defaults to Kobo Glo: 1024)',
+              default: 1024
+            },
+            ereader: {
+              type: 'string',
+              description: 'E-reader preset (kobo-glo, kobo-clara-hd, kindle-paperwhite, kobo-aura, kobo-sage, kobo-elipsa)',
+              enum: ['kobo-glo', 'kobo-clara-hd', 'kindle-paperwhite', 'kobo-aura', 'kobo-sage', 'kobo-elipsa']
             },
             fullPage: {
               type: 'boolean',
@@ -89,6 +104,36 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ['selector']
         }
+      },
+      {
+        name: 'test_ereader_compatibility',
+        description: 'Test Kobobo interface across multiple e-reader devices and orientations',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Path to test (e.g., /, /series, /authors)',
+              default: '/'
+            },
+            devices: {
+              type: 'array',
+              description: 'E-reader devices to test (default: all)',
+              items: {
+                type: 'string',
+                enum: ['kobo-glo', 'kobo-clara-hd', 'kindle-paperwhite', 'kobo-aura', 'kobo-sage', 'kobo-elipsa']
+              }
+            },
+            orientations: {
+              type: 'array',
+              description: 'Orientations to test (default: [portrait, landscape])',
+              items: {
+                type: 'string',
+                enum: ['portrait', 'landscape']
+              }
+            }
+          }
+        }
       }
     ]
   };
@@ -106,9 +151,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (request.params.name) {
       case 'screenshot_kobobo':
-        const { url = 'http://localhost:5057', width = 1280, height = 720, fullPage = false } = request.params.arguments || {};
+        const { url = 'http://localhost:5057', width = 758, height = 1024, fullPage = false, ereader } = request.params.arguments || {};
         
-        await page.setViewportSize({ width, height });
+        // Use e-reader preset if specified, otherwise use provided dimensions
+        let viewport = { width, height };
+        if (ereader && E_READER_VIEWPORTS[ereader]) {
+          viewport = E_READER_VIEWPORTS[ereader];
+        }
+        
+        await page.setViewportSize(viewport);
         await page.goto(url, { waitUntil: 'networkidle' });
         
         const screenshot = await page.screenshot({ 
@@ -125,7 +176,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             },
             {
               type: 'text',
-              text: `Screenshot taken of ${url} at ${width}x${height}${fullPage ? ' (full page)' : ''}`
+              text: `Screenshot taken of ${url} at ${viewport.width}x${viewport.height}${ereader ? ` (${ereader})` : ''}${fullPage ? ' (full page)' : ''}`
             }
           ]
         };
@@ -135,7 +186,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const baseUrl = 'http://localhost:5057';
         const fullUrl = `${baseUrl}${path}`;
         
-        await page.setViewportSize({ width: 1280, height: 720 });
+        await page.setViewportSize({ width: 758, height: 1024 });
         await page.goto(fullUrl, { waitUntil: 'networkidle' });
         
         if (waitFor) {
@@ -182,6 +233,55 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     `Text content: ${textContent}\n` +
                     `Inner HTML: ${innerHTML}`
             }
+          ]
+        };
+
+      case 'test_ereader_compatibility':
+        const { 
+          path: testPath = '/', 
+          devices = ['kobo-glo', 'kobo-clara-hd', 'kindle-paperwhite'], 
+          orientations = ['portrait', 'landscape'] 
+        } = request.params.arguments || {};
+        
+        const baseTestUrl = 'http://localhost:5057';
+        const fullTestUrl = `${baseTestUrl}${testPath}`;
+        const screenshots = [];
+        let summary = `E-reader compatibility test for ${testPath}\n\n`;
+        
+        for (const deviceName of devices) {
+          const deviceViewport = E_READER_VIEWPORTS[deviceName];
+          if (!deviceViewport) continue;
+          
+          for (const orientation of orientations) {
+            const viewport = orientation === 'landscape' 
+              ? { width: deviceViewport.height, height: deviceViewport.width }
+              : deviceViewport;
+              
+            await page.setViewportSize(viewport);
+            await page.goto(fullTestUrl, { waitUntil: 'networkidle' });
+            
+            const screenshot = await page.screenshot({ 
+              fullPage: true,
+              type: 'png'
+            });
+            
+            screenshots.push({
+              type: 'image',
+              data: screenshot.toString('base64'),
+              mimeType: 'image/png'
+            });
+            
+            summary += `✓ ${deviceName} (${orientation}): ${viewport.width}x${viewport.height}\n`;
+          }
+        }
+        
+        return {
+          content: [
+            {
+              type: 'text',
+              text: summary + `\nGenerated ${screenshots.length} screenshots across ${devices.length} devices and ${orientations.length} orientations.`
+            },
+            ...screenshots
           ]
         };
 
