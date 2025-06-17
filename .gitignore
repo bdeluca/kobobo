@@ -169,4 +169,10 @@ kobobo.yml
 # helper scripts are checked in
 # docs are checked in
 
+# support directory
+support/node_modules/
+support/package-lock.json
+support/playwright-report/
+support/test-results/
+
 
