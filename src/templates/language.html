@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books by Language</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+</head>
+<body>
+    <div class="banner">
+        <h1>BOOKS BY LANGUAGE</h1>
+    </div>
+    
+    <main>
+        <!-- Navigation back to home -->
+        <div class="nav-back">
+            <a href="{{ url_for('index') }}" class="nav-button">← BACK TO HOME</a>
+        </div>
+        
+        <div class="message-container">
+            <h2>Coming Soon</h2>
+            <p>{{ message }}</p>
+            <p>Language information is not currently provided by the OPDS feed from Calibre. This feature will be implemented when the data becomes available.</p>
+            
+            <div class="suggested-alternatives">
+                <h3>Alternative Browsing Options:</h3>
+                <a href="{{ url_for('books') }}" class="nav-button">Browse All Books</a>
+                <a href="{{ url_for('authors') }}" class="nav-button">Browse by Author</a>
+                <a href="{{ url_for('series') }}" class="nav-button">Browse by Series</a>
+                <a href="{{ url_for('search') }}" class="nav-button">Search Books</a>
+            </div>
+        </div>
+    </main>
+    
+    <div class="bottom-spacer"></div>
+</body>
+</html>

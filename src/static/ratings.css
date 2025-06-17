@@ -1,0 +1,108 @@
+/* Ratings page specific styles - E-reader optimized */
+
+.nav-back {
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.nav-back .nav-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border: 2px solid #000;
+    font-size: 16px;
+    min-height: 44px;
+    min-width: 100px;
+}
+
+.nav-back .nav-button:active {
+    background-color: #333;
+}
+
+.ratings-list {
+    margin: 20px 0;
+}
+
+.rating-group {
+    margin-bottom: 30px;
+}
+
+.rating-header {
+    background-color: #001f3f;
+    color: #fff;
+    padding: 12px 15px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.rating-books {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.rating-books td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.book-item {
+    min-height: 180px;
+}
+
+.book-item img {
+    width: 100px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 6px;
+}
+
+.book-title {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 6px 0 3px 0;
+    line-height: 1.3;
+}
+
+.book-author {
+    font-size: 11px;
+    color: #666;
+    margin: 3px 0;
+}
+
+.book-item.empty {
+    border: none;
+    min-height: auto;
+}
+
+.rating-separator {
+    border: none;
+    height: 2px;
+    background-color: #ddd;
+    margin: 20px 0;
+}
+
+/* Make touch targets larger for e-readers */
+.book-link {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: inherit;
+    min-height: 44px;
+    border-radius: 3px;
+}
+
+.book-link:active {
+    background-color: #f0f0f0;
+}
+
+/* Star ratings styling */
+.rating-header {
+    font-family: Arial, sans-serif;
+}
