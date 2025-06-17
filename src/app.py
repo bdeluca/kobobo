@@ -178,6 +178,42 @@ def author_page(encoded_id):
     return render_template('author.html', author=author, calibre_root=calibre_root)
 
 
+@app.route('/debug/series')
+def debug_series():
+    series_dict = GlobalCache().series
+    debug_info = []
+    
+    for series_name, books in list(series_dict.items())[:10]:  # Limit to first 10 for readability
+        book_info = []
+        for position, book in sorted(books.items()):
+            book_info.append(f"Position {position}: {book.title}")
+        debug_info.append({
+            'series_name': series_name,
+            'books': book_info
+        })
+    
+    return render_template_string('''
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Series Debug</title>
+        </head>
+        <body>
+            <h1>Series Debug Information</h1>
+            <p>Total series: {{ total_series }}</p>
+            {% for series in debug_info %}
+            <h3>{{ series.series_name }}</h3>
+            <ul>
+            {% for book in series.books %}
+                <li>{{ book }}</li>
+            {% endfor %}
+            </ul>
+            {% endfor %}
+        </body>
+        </html>
+    ''', debug_info=debug_info, total_series=len(series_dict))
+
 @app.route('/binfo')
 def binfo():
     user_agent = request.headers.get('User-Agent')

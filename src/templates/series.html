@@ -36,19 +36,17 @@
                 <table>
                 <tr>
                 {% for position, book in series[series_title] | dictsort %}
-
                     <td class="book-item">
                      <a href="{{ url_for('book_detail', book_id=book.id) }}" class="book-link">
                         <img src="{{ url_for('get_cover', cover_id=book.cover_id) }}" alt="Cover for {{ book.title }}" loading="lazy"/>
                         <p class="book-title">{{ book.title | truncate(40, True, '...') }}</p>
                     </a>
                     </td>
-                    {% endfor %}
-                </tr>
                 {% endfor %}
+                </tr>
                 </table>
-
             </p>
+            {% endfor %}
         {% endfor %}
     </div>
 <div class="bottom-spacer"></div>
