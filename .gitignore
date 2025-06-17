@@ -166,4 +166,7 @@ src/config/settings.ini
 src/bin/*.exe
 kobobo.yml
 
+# helper scripts are checked in
+# docs are checked in
+
 

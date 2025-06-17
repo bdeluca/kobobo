@@ -5,8 +5,8 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copy the requirements file
-COPY ../requirements.txt .
-COPY ../src/ .
+COPY requirements.txt .
+COPY src/ .
 COPY docker/docker-entrypoint.sh /usr/local/bin/
 
 # Install Python dependencies
@@ -19,7 +19,7 @@ ENV KOBOBO_PASSWORD=password
 
 
 
-EXPOSE 5003
+EXPOSE 5055
 
 # Set the entry point or default command to run your Flask app
 # The command below assumes your Flask app’s entry point is in app.py
