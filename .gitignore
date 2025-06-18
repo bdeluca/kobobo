@@ -175,4 +175,6 @@ support/package-lock.json
 support/playwright-report/
 support/test-results/
 
+# temporary files
+tmp/
 

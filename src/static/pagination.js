@@ -12,30 +12,41 @@ var allItems = [];
 
 // Initialize pagination when page loads
 function initPagination() {
-    // Find all items to paginate (works with different page types)
-    var itemSelectors = [
-        '.author-button',    // Authors page
-        '.book-item:not(.empty)', // Books/series pages  
-        '.letter-group'      // Any grouped content
-    ];
-    
-    var items = [];
-    for (var i = 0; i < itemSelectors.length; i++) {
-        var found = document.querySelectorAll(itemSelectors[i]);
-        if (found.length > 0) {
-            items = Array.prototype.slice.call(found);
-            break;
+    // Check if we're on series page - handle differently
+    if (window.location.pathname.includes('/series')) {
+        // For series page, paginate by complete series containers
+        var seriesContainers = document.querySelectorAll('.series-list .letter-group p');
+        if (seriesContainers.length > 0) {
+            allItems = Array.prototype.slice.call(seriesContainers);
+            itemsPerPage = 4; // Show 4 series per page for better viewing
+        } else {
+            return; // No series found
         }
+    } else {
+        // For other pages, use individual items
+        var itemSelectors = [
+            '.author-button',    // Authors page
+            '.book-item:not(.empty)' // Books pages
+        ];
+        
+        var items = [];
+        for (var i = 0; i < itemSelectors.length; i++) {
+            var found = document.querySelectorAll(itemSelectors[i]);
+            if (found.length > 0) {
+                items = Array.prototype.slice.call(found);
+                break;
+            }
+        }
+        allItems = items;
     }
+    
+    totalItems = allItems.length;
+    totalPages = Math.ceil(totalItems / itemsPerPage);
     
     // Only show pagination if we have enough items
-    if (items.length <= itemsPerPage) {
+    if (totalItems <= itemsPerPage) {
         return; // Don't show pagination for short lists
     }
-    
-    allItems = items;
-    totalItems = items.length;
-    totalPages = Math.ceil(totalItems / itemsPerPage);
     
     createPaginationControls();
     showPage(1);
