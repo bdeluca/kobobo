@@ -1,0 +1,111 @@
+/* 
+ * Simple pagination controls for e-reader compatibility
+ * Right-side floating up/down arrows for pages with long lists
+ */
+
+.pagination-controls {
+    position: fixed;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pagination-arrow {
+    width: 50px;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pagination-arrow:hover {
+    background-color: #333;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pagination-arrow:active {
+    background-color: #007BFF;
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-arrow.disabled {
+    background-color: #ccc;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.pagination-arrow.disabled:hover {
+    background-color: #ccc;
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Page indicator */
+.page-indicator {
+    position: fixed;
+    right: 20px;
+    bottom: 90px; /* Above alphabet navigation */
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 998;
+    display: none; /* Hidden by default, shown via JavaScript */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pagination-controls {
+        right: 10px;
+    }
+    
+    .pagination-arrow {
+        width: 44px; /* E-reader minimum touch target */
+        height: 44px;
+        font-size: 20px;
+    }
+    
+    .page-indicator {
+        right: 15px;
+        bottom: 85px;
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagination-controls {
+        right: 8px;
+    }
+    
+    .pagination-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .page-indicator {
+        right: 12px;
+        bottom: 80px;
+    }
+}

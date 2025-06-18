@@ -6,6 +6,7 @@
     <title>Author List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='authors.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 
 </head>
 <div class="banner">
@@ -46,5 +47,6 @@
         {% endfor %}
     </div>
 <div class="bottom-spacer"></div>
+<script src="{{ url_for('static', filename='pagination.js') }}"></script>
 </body>
 </html>

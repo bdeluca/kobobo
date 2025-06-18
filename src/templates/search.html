@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Books</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='book-display.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 </head>
 <body>
     <div class="banner">
@@ -84,5 +86,6 @@
     </main>
     
     <div class="bottom-spacer"></div>
+    <script src="{{ url_for('static', filename='pagination.js') }}"></script>
 </body>
 </html>

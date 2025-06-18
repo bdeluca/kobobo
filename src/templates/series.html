@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Author List</title>
+    <title>Series List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='book-display.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='series.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 
 </head>
 <div class="banner">
@@ -33,6 +35,10 @@
             {% for series_title in series_list %}
                <p>
                 <h1><span class="series-title">{{ series_title }}</span></h1>
+                {% set first_book = series[series_title].values() | first %}
+                {% if first_book %}
+                    <div class="series-author">by <a href="{{ url_for('library.author_page', encoded_id=first_book.author_encoded_name) }}" class="author-link">{{ first_book.author }}</a></div>
+                {% endif %}
                 <table>
                 <tr>
                 {% for position, book in series[series_title] | dictsort %}
@@ -50,5 +56,6 @@
         {% endfor %}
     </div>
 <div class="bottom-spacer"></div>
+<script src="{{ url_for('static', filename='pagination.js') }}"></script>
 </body>
 </html>

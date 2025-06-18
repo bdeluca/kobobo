@@ -10,10 +10,32 @@
     font-weight: 700;
     font-size: 1.8em;
     color: #333;
-    margin: 30px 0 20px 0;
-    display: block;
+    margin: 30px 0 5px 0;
+    display: inline-block;
     border-bottom: 3px solid #007BFF;
     padding-bottom: 10px;
+}
+
+.series-author {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 1.1em;
+    color: #666;
+    font-style: italic;
+    margin: 0 0 20px 15px;
+    display: inline-block;
+    vertical-align: bottom;
+    padding-bottom: 8px;
+}
+
+.series-author .author-link {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.series-author .author-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 /* Series book container */
@@ -133,6 +155,11 @@
     .series-title {
         font-size: 1.5em;
     }
+    
+    .series-author {
+        font-size: 1em;
+        margin-bottom: 15px;
+    }
 }
 
 /* Kobo e-reader specific optimizations */
@@ -160,5 +187,10 @@
     .series-list .book-item .book-title {
         font-size: 11px;
         min-height: 40px;
+    }
+    
+    .series-author {
+        font-size: 0.9em;
+        margin-bottom: 10px;
     }
 }
