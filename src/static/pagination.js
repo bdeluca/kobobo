@@ -12,9 +12,9 @@ var allItems = [];
 
 // Initialize pagination when page loads
 function initPagination() {
-    // Disable pagination on series page - it's causing issues with the complex layout
-    if (window.location.pathname.includes('/series')) {
-        return; // No pagination for series page
+    // Disable pagination on series and authors pages - complex layouts cause issues
+    if (window.location.pathname.includes('/series') || window.location.pathname.includes('/authors')) {
+        return; // No pagination for series or authors pages
     } else {
         // For other pages, use individual items
         var itemSelectors = [
