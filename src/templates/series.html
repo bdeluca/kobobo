@@ -34,11 +34,13 @@
             {% endif %}
             {% for series_title in series_list %}
                <p>
-                <h1><span class="series-title">{{ series_title }}</span></h1>
                 {% set first_book = series[series_title].values() | first %}
-                {% if first_book %}
-                    <div class="series-author">by <a href="{{ url_for('library.author_page', encoded_id=first_book.author_encoded_name) }}" class="author-link">{{ first_book.author }}</a></div>
-                {% endif %}
+                <h1>
+                    <span class="series-title">{{ series_title }}</span>
+                    {% if first_book %}
+                        <span class="series-author-inline">by <a href="{{ url_for('library.author_page', encoded_id=first_book.author_encoded_name) }}" class="author-link">{{ first_book.author }}</a></span>
+                    {% endif %}
+                </h1>
                 <table>
                 <tr>
                 {% for position, book in series[series_title] | dictsort %}

@@ -6,36 +6,37 @@
 }
 
 .series-title {
-    font-family: 'Segoe UI', 'Roboto', 'Arial Black', Arial, sans-serif;
-    font-weight: 700;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
     font-size: 1.8em;
     color: #333;
-    margin: 30px 0 5px 0;
-    display: inline-block;
-    border-bottom: 3px solid #007BFF;
-    padding-bottom: 10px;
 }
 
-.series-author {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 1.1em;
+/* Inline author styling - appears on same line as series title */
+.series-author-inline {
+    font-family: Arial, sans-serif;
+    font-size: 0.6em; /* Smaller relative to series title */
     color: #666;
     font-style: italic;
-    margin: 0 0 20px 15px;
-    display: inline-block;
-    vertical-align: bottom;
-    padding-bottom: 8px;
+    font-weight: normal;
+    margin-left: 15px;
 }
 
-.series-author .author-link {
+.series-author-inline .author-link {
     color: #007BFF;
     text-decoration: none;
-    transition: color 0.2s ease;
 }
 
-.series-author .author-link:hover {
+.series-author-inline .author-link:hover {
     color: #0056b3;
     text-decoration: underline;
+}
+
+/* Series container styling */
+.series-list h1 {
+    margin: 30px 0 20px 0;
+    border-bottom: 3px solid #007BFF;
+    padding-bottom: 10px;
 }
 
 /* Series book container */
