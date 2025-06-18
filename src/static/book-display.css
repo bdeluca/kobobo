@@ -9,11 +9,14 @@
     width: 160px;
     min-height: 320px;
     margin: 10px;
-    display: inline-block;
+    display: flex; /* Use flexbox for better alignment */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     vertical-align: top;
     background-color: #ffffff;
     border: 3px solid #333;
-    border-radius: 12px;
+    border-radius: 20px; /* Increased from 12px for softer corners */
     padding: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
@@ -34,10 +37,11 @@
     object-position: center;
     background-color: #f8f8f8;
     border: 2px solid #ddd;
-    border-radius: 6px;
-    margin: 0 auto 12px auto;
+    border-radius: 10px; /* Increased from 6px to match softer theme */
+    margin: 0 0 12px 0; /* Simplified margin since flexbox centers it */
     display: block;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Prevent image from shrinking */
 }
 
 /* Enhanced book title - more prominent */
@@ -47,9 +51,10 @@
     font-weight: 700;
     line-height: 1.3;
     color: #333;
-    margin: 8px 0 6px 0;
+    margin: 4px 0 6px 0;
     padding: 6px 8px;
     min-height: 56px; /* Increased height for larger text */
+    width: 100%; /* Take full width of container */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,8 +62,9 @@
     overflow-wrap: break-word;
     hyphens: auto;
     background-color: rgba(0, 123, 255, 0.05); /* Subtle blue background */
-    border-radius: 6px;
+    border-radius: 10px; /* Increased to match theme */
     border: 1px solid rgba(0, 123, 255, 0.1);
+    box-sizing: border-box;
 }
 
 /* Book author */
@@ -133,17 +139,20 @@
         width: 145px;
         min-height: 300px;
         padding: 12px;
+        border-radius: 18px;
     }
     
     .book-item img {
         width: 121px;
         height: 177px;
+        border-radius: 8px;
     }
     
     .book-item .book-title {
         font-size: 13px;
         min-height: 52px;
         padding: 5px 6px;
+        border-radius: 8px;
     }
 }
 
@@ -154,17 +163,20 @@
         min-height: 280px;
         padding: 10px;
         margin: 8px;
+        border-radius: 16px;
     }
     
     .book-item img {
         width: 110px;
         height: 161px;
+        border-radius: 7px;
     }
     
     .book-item .book-title {
         font-size: 12px;
         min-height: 48px;
         padding: 4px 5px;
+        border-radius: 7px;
     }
     
     .book-item .book-author {
@@ -184,16 +196,19 @@
         padding: 8px;
         margin: 6px;
         border-width: 2px;
+        border-radius: 14px;
     }
     
     .book-item img {
         width: 100px;
         height: 147px;
+        border-radius: 6px;
     }
     
     .book-item .book-title {
         font-size: 11px;
         min-height: 44px;
         padding: 3px 4px;
+        border-radius: 6px;
     }
 }

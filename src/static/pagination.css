@@ -16,11 +16,11 @@
 
 .pagination-arrow {
     width: 50px;
-    height: 50px;
+    height: 70px; /* Increased from 50px to make taller */
     background-color: #000;
     color: #fff;
     border: 2px solid #333;
-    border-radius: 8px;
+    border-radius: 12px; /* Increased to match softer theme */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,8 +81,9 @@
     
     .pagination-arrow {
         width: 44px; /* E-reader minimum touch target */
-        height: 44px;
+        height: 60px; /* Proportionally taller for mobile */
         font-size: 20px;
+        border-radius: 10px;
     }
     
     .page-indicator {
@@ -100,8 +101,9 @@
     
     .pagination-arrow {
         width: 40px;
-        height: 40px;
+        height: 55px; /* Proportionally taller for small screens */
         font-size: 18px;
+        border-radius: 8px;
     }
     
     .page-indicator {
