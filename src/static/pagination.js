@@ -12,16 +12,9 @@ var allItems = [];
 
 // Initialize pagination when page loads
 function initPagination() {
-    // Check if we're on series page - handle differently
+    // Disable pagination on series page - it's causing issues with the complex layout
     if (window.location.pathname.includes('/series')) {
-        // For series page, paginate by complete series containers
-        var seriesContainers = document.querySelectorAll('.series-list .letter-group p');
-        if (seriesContainers.length > 0) {
-            allItems = Array.prototype.slice.call(seriesContainers);
-            itemsPerPage = 4; // Show 4 series per page for better viewing
-        } else {
-            return; // No series found
-        }
+        return; // No pagination for series page
     } else {
         // For other pages, use individual items
         var itemSelectors = [
