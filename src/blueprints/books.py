@@ -19,11 +19,8 @@ def books():
     # Sort by title, ignoring articles like "The", "A", "An"
     all_books.sort(key=lambda x: get_sort_key(x.title))
     
-    # Simple pagination - show first 50 books for now
-    books_per_page = 50
-    books_to_show = all_books[:books_per_page]
-    
-    return render_template('books.html', books=books_to_show, total_books=len(all_books))
+    # Return all books - JavaScript will handle pagination
+    return render_template('books.html', books=all_books, total_books=len(all_books))
 
 @books_bp.route('/ratings')
 def ratings():

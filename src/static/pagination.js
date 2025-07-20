@@ -16,6 +16,10 @@ function initPagination() {
     if (window.location.pathname.includes('/series') || window.location.pathname.includes('/authors')) {
         return; // No pagination for series or authors pages
     } else {
+        // Adjust items per page based on the page type
+        if (window.location.pathname.includes('/books')) {
+            itemsPerPage = 48; // Show more books per page (16 rows of 3)
+        }
         // For other pages, use individual items
         var itemSelectors = [
             '.author-button',    // Authors page
