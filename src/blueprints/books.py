@@ -11,11 +11,6 @@ books_bp = Blueprint('books', __name__)
 @books_bp.route('/books')
 def books():
     """All books listing with pagination"""
-    # Get page number from query params
-    page = request.args.get('page', 1, type=int)
-    if page < 1:
-        page = 1
-    
     # Get all books from cache
     all_books = []
     for book_id, book in GlobalCache().books.items():
@@ -24,26 +19,11 @@ def books():
     # Sort by title, ignoring articles like "The", "A", "An"
     all_books.sort(key=lambda x: get_sort_key(x.title))
     
-    # Pagination
-    books_per_page = 48  # Divisible by 3 for our grid layout
-    total_books = len(all_books)
-    total_pages = (total_books + books_per_page - 1) // books_per_page  # Ceiling division
+    # Simple pagination - show first 50 books for now
+    books_per_page = 50
+    books_to_show = all_books[:books_per_page]
     
-    # Ensure page is within valid range
-    if page > total_pages:
-        page = total_pages
-    
-    # Calculate slice indices
-    start_idx = (page - 1) * books_per_page
-    end_idx = start_idx + books_per_page
-    books_to_show = all_books[start_idx:end_idx]
-    
-    return render_template('books.html', 
-                         books=books_to_show, 
-                         total_books=total_books,
-                         current_page=page,
-                         total_pages=total_pages,
-                         books_per_page=books_per_page)
+    return render_template('books.html', books=books_to_show, total_books=len(all_books))
 
 @books_bp.route('/ratings')
 def ratings():
