@@ -71,7 +71,11 @@
             <table class="page-numbers-table">
                 {% for row_start in range(1, total_pages + 1, 5) %}
                 <tr>
-                    {% for page_num in range(row_start, min(row_start + 5, total_pages + 1)) %}
+                    {% set row_end = row_start + 5 %}
+                    {% if row_end > total_pages + 1 %}
+                        {% set row_end = total_pages + 1 %}
+                    {% endif %}
+                    {% for page_num in range(row_start, row_end) %}
                     <td>
                         {% if page_num == current_page %}
                         <span class="current-page">{{ page_num }}</span>
