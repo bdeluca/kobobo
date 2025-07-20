@@ -45,7 +45,48 @@
         
     </main>
     
+    <!-- Simple pagination links for Kobo -->
+    {% if total_pages > 1 %}
+    <div class="simple-pagination">
+        <table class="pagination-table">
+            <tr>
+                <td class="prev-cell">
+                    {% if current_page > 1 %}
+                    <a href="{{ url_for('books.books', page=current_page-1) }}" class="nav-button">← PREVIOUS</a>
+                    {% endif %}
+                </td>
+                <td class="page-info">
+                    Page {{ current_page }} of {{ total_pages }}
+                </td>
+                <td class="next-cell">
+                    {% if current_page < total_pages %}
+                    <a href="{{ url_for('books.books', page=current_page+1) }}" class="nav-button">NEXT →</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        
+        <!-- Page number grid for easy navigation -->
+        <div class="page-grid">
+            <table class="page-numbers-table">
+                {% for row_start in range(1, total_pages + 1, 5) %}
+                <tr>
+                    {% for page_num in range(row_start, min(row_start + 5, total_pages + 1)) %}
+                    <td>
+                        {% if page_num == current_page %}
+                        <span class="current-page">{{ page_num }}</span>
+                        {% else %}
+                        <a href="{{ url_for('books.books', page=page_num) }}" class="page-link">{{ page_num }}</a>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    
     <div class="bottom-spacer"></div>
-    <script src="{{ url_for('static', filename='pagination.js') }}"></script>
 </body>
 </html>
