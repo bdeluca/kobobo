@@ -4,6 +4,7 @@ Books blueprint for book browsing and search functionality
 from flask import Blueprint, render_template, request
 from calibre.cache import GlobalCache
 from calibre.opds import search_opds
+from utils.sorting import get_sort_key
 
 books_bp = Blueprint('books', __name__)
 
@@ -15,8 +16,8 @@ def books():
     for book_id, book in GlobalCache().books.items():
         all_books.append(book)
     
-    # Sort by title
-    all_books.sort(key=lambda x: x.title.lower())
+    # Sort by title, ignoring articles like "The", "A", "An"
+    all_books.sort(key=lambda x: get_sort_key(x.title))
     
     # Simple pagination - show first 50 books for now
     books_per_page = 50
@@ -40,9 +41,13 @@ def ratings():
     for i in range(5, 0, -1):
         star_rating = "★" * i
         if star_rating in rating_dict:
+            # Sort books within each rating group, ignoring articles
+            rating_dict[star_rating].sort(key=lambda x: get_sort_key(x.title))
             sorted_ratings.append((star_rating, rating_dict[star_rating]))
     
     if "No Rating" in rating_dict:
+        # Sort books in the "No Rating" group as well
+        rating_dict["No Rating"].sort(key=lambda x: get_sort_key(x.title))
         sorted_ratings.append(("No Rating", rating_dict["No Rating"]))
     
     return render_template('ratings.html', rating_groups=sorted_ratings)

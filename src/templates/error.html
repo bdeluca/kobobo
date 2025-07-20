@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
 </head>
 <body>
-    <div class="banner">
-        <h1>ERROR</h1>
+    <div class="banner-with-home">
+        <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+        <div class="banner">
+            <h1>ERROR</h1>
+        </div>
     </div>
     
     <main>
@@ -17,7 +20,6 @@
             <p>{{ message }}</p>
             
             <div class="error-actions">
-                <a href="{{ url_for('main.index') }}" class="nav-button">← BACK TO HOME</a>
                 <a href="javascript:history.back()" class="nav-button">← GO BACK</a>
             </div>
         </div>

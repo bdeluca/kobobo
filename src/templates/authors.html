@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 
 </head>
-<div class="banner">
-    <h1>AUTHORS</h1>
-</div>
 <body>
+<div class="banner-with-home">
+    <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+    <div class="banner">
+        <h1>AUTHORS</h1>
+    </div>
+</div>
     <!-- Alphabet Navigation Table -->
     <div class="alphabet-navigation">
         <table>

@@ -8,6 +8,33 @@ body {
     font-weight: 500;
 }
 
+/* Home link styling for all pages */
+.banner-with-home {
+    position: relative;
+}
+
+.home-link {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 10px 15px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.home-link:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
 
 
 .author-banner {

@@ -6,6 +6,7 @@ from flask import Blueprint, render_template
 from calibre.cache import GlobalCache
 import calibre.opds as opds
 from config import Config
+from utils.sorting import get_grouping_letter
 
 library_bp = Blueprint('library', __name__)
 
@@ -32,7 +33,7 @@ def series():
     letter_dict = {}
     
     for series_title in series_dict.keys():
-        initial = series_title[0].upper()
+        initial = get_grouping_letter(series_title)
         if initial not in letter_dict:
             letter_dict[initial] = []
         letter_dict[initial].append(series_title)

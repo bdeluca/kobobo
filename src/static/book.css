@@ -1,7 +1,32 @@
+.banner-with-home {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.home-link {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 10px 15px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.home-link:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
 .banner {
     text-align: center;
     font-size: 3em;
-    margin-bottom: 20px;
 }
 
 .book-author {
@@ -12,4 +37,32 @@
 .book-contents {
     margin: 5px;
     padding: 1px;
+}
+
+.book-series {
+    margin: 15px 0;
+}
+
+.series-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f0f8ff;
+    border: 2px solid #007BFF;
+    border-radius: 10px;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+.series-link:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.book-publication-date {
+    margin: 10px 0;
+    font-size: 1.1em;
+    color: #666;
 }

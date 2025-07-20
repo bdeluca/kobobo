@@ -2,6 +2,7 @@
 Flask application factory for Kobobo
 """
 import logging
+import base64
 from flask import Flask, render_template
 
 def create_app():
@@ -10,6 +11,14 @@ def create_app():
     
     # Configure logging
     logging.basicConfig(level=logging.INFO)
+    
+    # Custom filters
+    @app.template_filter('b64encode')
+    def b64encode_filter(text):
+        """Base64 encode a string"""
+        if isinstance(text, str):
+            text = text.encode('utf-8')
+        return base64.urlsafe_b64encode(text).decode('utf-8')
     
     # Register blueprints
     from blueprints.main import main_bp

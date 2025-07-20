@@ -8,16 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='book-display.css') }}">
 </head>
 <body>
-    <div class="banner">
-        <h1>BOOKS BY LANGUAGE</h1>
+    <div class="banner-with-home">
+        <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+        <div class="banner">
+            <h1>BOOKS BY LANGUAGE</h1>
+        </div>
     </div>
     
     <main>
-        <!-- Navigation back to home -->
-        <div class="nav-back">
-            <a href="{{ url_for('main.index') }}" class="nav-button">← BACK TO HOME</a>
-        </div>
-        
         <div class="message-container">
             <h2>Coming Soon</h2>
             <p>{{ message }}</p>

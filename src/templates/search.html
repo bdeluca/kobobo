@@ -10,16 +10,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 </head>
 <body>
-    <div class="banner">
-        <h1>SEARCH BOOKS</h1>
+    <div class="banner-with-home">
+        <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+        <div class="banner">
+            <h1>SEARCH BOOKS</h1>
+        </div>
     </div>
     
     <main>
-        <!-- Navigation back to home -->
-        <div class="nav-back">
-            <a href="{{ url_for('main.index') }}" class="nav-button">← BACK TO HOME</a>
-        </div>
-        
         <!-- Search form -->
         <div class="search-container">
             <form method="GET" action="{{ url_for('books.search') }}" class="search-form">

@@ -10,8 +10,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='pagination.css') }}">
 
 </head>
-<div class="banner">
-    <h1>SERIES</h1>
+<div class="banner-with-home">
+    <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+    <div class="banner">
+        <h1>SERIES</h1>
+    </div>
 </div>
 <body>
     <!-- Alphabet Navigation Table -->
@@ -33,12 +36,13 @@
                 <hr>
             {% endif %}
             {% for series_title in series_list %}
-               <p>
+               <p id="series-{{ series_title | replace(' ', '-') | replace(':', '') | replace('\'', '') | replace('(', '') | replace(')', '') | lower }}">
                 {% set first_book = series[series_title].values() | first %}
                 <h1>
                     <span class="series-title">{{ series_title }}</span>
                     {% if first_book %}
-                        <span class="series-author-inline">by <a href="{{ url_for('library.author_page', encoded_id=first_book.author_encoded_name) }}" class="author-link">{{ first_book.author }}</a></span>
+                        {% set author_encoded = first_book.author | b64encode %}
+                        <span class="series-author-inline">by <a href="{{ url_for('library.author_page', encoded_id=author_encoded) }}" class="author-link">{{ first_book.author }}</a></span>
                     {% endif %}
                 </h1>
                 <table>

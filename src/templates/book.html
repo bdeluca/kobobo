@@ -8,7 +8,10 @@
 </head>
 <body>
     <div class="book-container">
-        <h1 class="banner">{{ book.title }}</h1>
+        <div class="banner-with-home">
+            <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+            <h1 class="banner">{{ book.title }}</h1>
+        </div>
     <div class="book-contents">
         <div class="book-cover">
             <img src="{{ url_for('downloads.get_cover', cover_id=book.cover_id) }}" alt="Cover for {{ book.title }}" loading="lazy"/>
@@ -21,6 +24,15 @@
                 <span class="book-rating">{{ book.rating }} </span>
             {% endif %}
             </p>
+            {% if book.series %}
+            <p class="book-series">
+                {% set series_name = book.series.split('[')[0].strip() %}
+                {% set series_anchor = series_name | replace(' ', '-') | replace(':', '') | replace('\'', '') | replace('(', '') | replace(')', '') | lower %}
+                <a href="{{ url_for('library.series') }}#series-{{ series_anchor }}" class="series-link">
+                    Series: {{ book.series }}
+                </a>
+            </p>
+            {% endif %}
             <p class="book-publication-date">{{ book.pretty_date }}</p>
             <div class="book-description">
                 <p>{{ book.description }}</p>

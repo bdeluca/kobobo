@@ -9,8 +9,11 @@
 </head>
 <body>
     <!-- Author Banner -->
-    <div class="banner">
-        <h1>{{ author.name }}</h1>
+    <div class="banner-with-home">
+        <a href="{{ url_for('main.index') }}" class="home-link">← HOME</a>
+        <div class="banner">
+            <h1>{{ author.name }}</h1>
+        </div>
     </div>
 
     <!-- Books Section -->

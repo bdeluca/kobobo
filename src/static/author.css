@@ -1,0 +1,29 @@
+.banner-with-home {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.home-link {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 10px 15px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.home-link:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.banner {
+    text-align: center;
+}
