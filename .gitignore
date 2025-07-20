@@ -178,3 +178,6 @@ support/test-results/
 # temporary files
 tmp/
 
+# screenshots directory
+docs/screenshots/
+
