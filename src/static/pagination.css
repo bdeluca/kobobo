@@ -3,7 +3,8 @@
  * Right-side floating up/down arrows for pages with long lists
  */
 
-.pagination-controls {
+.pagination-controls,
+.side-pagination-controls {
     position: fixed;
     right: 15px;
     top: 50%;
@@ -70,12 +71,13 @@
     font-size: 12px;
     font-weight: bold;
     z-index: 998;
-    display: none; /* Hidden by default, shown via JavaScript */
+    display: block; /* Always visible for server-side pagination */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .pagination-controls {
+    .pagination-controls,
+    .side-pagination-controls {
         right: 10px;
     }
     
@@ -95,7 +97,8 @@
 }
 
 @media (max-width: 600px) {
-    .pagination-controls {
+    .pagination-controls,
+    .side-pagination-controls {
         right: 8px;
     }
     
