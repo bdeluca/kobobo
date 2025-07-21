@@ -11,7 +11,7 @@ def index():
     """Homepage with recent books"""
     recent_books = GlobalCache().get_catalog("Newest")
     recent_books = recent_books.books
-    return render_template('index.html', recent_books=recent_books[:8])
+    return render_template('index.html', recent_books=recent_books[:9])
 
 @main_bp.route('/book/<string:book_id>')
 def book_detail(book_id):

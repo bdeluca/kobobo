@@ -1,0 +1,9 @@
+/* Index page specific styles */
+.book-table {
+    margin: 20px auto; /* Center horizontally with auto margins */
+}
+
+.book-table table {
+    margin: 0 auto; /* Center the table itself */
+    width: auto; /* Let table size to its content */
+}

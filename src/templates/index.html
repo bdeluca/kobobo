@@ -23,9 +23,9 @@
 </table>
         <section class="book-table">
             <table>
-                {% for i in range(0, recent_books|length, 4) %}
+                {% for i in range(0, recent_books|length, 3) %}
                 <tr>
-                    {% for j in range(4) %}
+                    {% for j in range(3) %}
                     {% set index = i + j %}
                     {% if index < recent_books|length %}
                     <td class="book-item">
